@@ -1,5 +1,17 @@
 <?php get_header();  
-$offer2 = get_page_by_path('offer 2', OBJECT, 'Offers'); // Replace 'food_item' with your CPT slug
+$args = array(
+        'post_type'      => 'Offers', // Make sure this matches your Post Type slug
+        'posts_per_page' => 5,            // This ensures we get exactly 2 cards
+        'order'          => 'ASC'         // Shows them in the order you created them
+    );
+
+        $offers_query = new WP_Query($args);
+
+         // Get ACF fields for the current post in the loop
+        $discount = get_field('offer_discount' , $post2_id); 
+        $title = get_field('offer_title');
+        $button = get_field('offer_button');
+        $image    = get_field('offer_image');
 ?>
 
 
@@ -83,10 +95,10 @@ $offer2 = get_page_by_path('offer 2', OBJECT, 'Offers'); // Replace 'food_item' 
                         </div>
                         <div class="detail-box">
                             <h5>
-                              <?php  echo '<h3>' . get_the_title($offer2->slug) . '</h3>'; ?>
+                              <?php  echo $title; ?>
                             </h5>
                             <h6>
-                                <!-- <span>15%</span> Off -->
+                                <span> <?php echo $discount ; ?></span> Off
 
                             </h6>
                             <a href="">
