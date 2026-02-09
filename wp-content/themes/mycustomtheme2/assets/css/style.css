@@ -635,40 +635,6 @@ a:focus {
           justify-content: center;
 }
 
-.about_section .img-box img {
-  width: 100%;
-  max-width: 445px;
-  position: relative;
-  z-index: 2;
-}
-
-.about_section .detail-box p {
-  margin-top: 15px;
-}
-
-.about_section .detail-box a {
-  display: inline-block;
-  padding: 10px 45px;
-  background-color: #ffbe33;
-  color: #ffffff;
-  border-radius: 45px;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  border: none;
-  margin-top: 15px;
-}
-
-.about_section .detail-box a:hover {
-  background-color: #e69c00;
-}
-
-.book_section {
-  position: relative;
-}
-
-.book_section .heading_container {
-  margin-bottom: 25px;
-}
 
 .book_section .form_container .form-control {
   width: 100%;
@@ -1006,9 +972,7 @@ a:focus {
 }
 /*# sourceMappingURL=style.css.map */
 
-/* =========================
-   HOME OFFER IMAGE FIX
-========================= */
+/* offer image  */
 
 .offer_section .box {
   display: flex;
@@ -1051,8 +1015,6 @@ a:focus {
   }
 }
 
-
-
 .movie-card {
   background: #1f2630;
   border-radius: 20px;
@@ -1092,3 +1054,132 @@ a:focus {
   color: #000;
 }
 
+/* footer css  */
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 1200px; /* Adjust based on your site width */
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.footer-column {
+    flex: 1; /* Makes each of the 3 columns equal width */
+}
+
+
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+    }
+}
+
+
+
+/* Styling the theory text */
+.company-theory {
+    line-height: 1.6;
+    margin-bottom: 30px; /* This creates the space you requested */
+    color: #555;
+}
+
+/* Social Media Container */
+.footer-social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.footer-social-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #333; /* Dark circle background */
+    color: #fff !important;
+    border-radius: 50%; /* Makes it a circle */
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #0073aa; /* Change color on hover */
+    transform: translateY(-3px); /* Subtle lift effect */
+}
+
+.social-icon i {
+    font-size: 18px; /* Icon size */
+}
+
+.footer-info {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.custom-footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-footer-links li {
+    
+    margin: 0 15px;
+}
+
+.custom-footer-links a {
+    color: black;
+    text-decoration: none;
+    /* font-weight: bold; */
+}
+
+.custom-footer-links a:hover {
+    color: #0073aa; /* Standard WordPress Blue */
+}
+
+/* header links  */
+
+
+.header-menu-items {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+}
+.header-menu-items li {
+    display: inline-block;
+    padding: 0px 13px;
+}
+
+.header-menu-items li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.header-menu-items li a:hover {
+    color: #0073aa; /* Standard WordPress Blue */
+}
+.header-menu-items li:first-child {
+    order: -1; 
+}
+
+@media (max-width: 480px) {
+    .header-menu-items {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+}

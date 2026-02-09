@@ -187,7 +187,7 @@
                   <?php
                   $img = get_first_image_from_content();
                   if ($img) : ?>
-                    <img src="<?php echo esc_url($img); ?>" alt="<?php the_title(); ?>">
+                    <img src="<?php echo esc_url($img); ?>" alt="Image not found">
                   <?php endif; ?>
                 </div>
 
@@ -195,7 +195,7 @@
                 <div class="movie-content">
                   <h5><?php the_title(); ?></h5>
 
-                  <p><?php echo wp_trim_words(get_the_excerpt(), 18); ?></p>
+                  <p><?php echo wp_trim_words(get_the_excerpt()); ?></p>
 
                   <div class="movie-footer">
                     <span class="price">

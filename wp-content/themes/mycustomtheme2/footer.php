@@ -1,84 +1,63 @@
-<!-- FOOTER -->
- <footer class="footer_section mt-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 footer-col">
-          <div class="footer_contact">
-            <h4>
-              Contact Us
-            </h4>
-            <div class="contact_link_box">
-              <a href="">
-                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                <span>
-                  Location
-                </span>
-              </a>
-              <a href="">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-                <span>
-                  Call +01 1234567890
-                </span>
-              </a>
-              <a href="">
-                <i class="fa fa-envelope" aria-hidden="true"></i>
-                <span>
-                  demo@gmail.com
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 footer-col">
-          <div class="footer_detail">
-            <a href="" class="footer-logo">
-              Feane
-            </a>
-            <p>
-              Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with
-            </p>
-            <div class="footer_social">
-              <a href="">
-                <i class="fa fa-facebook" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-instagram" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-pinterest" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 footer-col">
-          <h4>
-            Opening Hours
-          </h4>
-          <p>
-            Everyday
-          </p>
-          <p>
-            10.00 Am -10.00 Pm
-          </p>
-        </div>
-      </div>
-      <div class="footer-info">
-        <p>
-          &copy; <span id="displayYear"></span> All Rights Reserved By
-          <a href="https://html.design/">Free Html Templates</a><br><br>
-          &copy; <span id="displayYear"></span> Distributed By
-          <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <?php dynamic_sidebar('footer-col-1'); ?>
+    </div>
+    
+    <div class="footer-column">
+      <div class="footer-company-info">
+        <h4 class="widget-title">iCreative</h4>
+
+        <p class="company-theory">
+          This is a brief description of our company values and mission.
+          We strive to provide the best services to our clients worldwide.
+          Experience excellence with our dedicated professional team.
         </p>
+
+        <div class="footer-social-links">
+          <a href="#" class="social-icon" aria-label="Facebook">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+          </a>
+          <a href="#" class="social-icon" aria-label="Instagram">
+            <i class="fa fa-instagram" aria-hidden="true"></i>
+          </a>
+          <a href="#" class="social-icon" aria-label="Twitter">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+          </a>
+        </div>
       </div>
     </div>
-  </footer>
+
+    <!-- Column 3 -->
+    <div class="footer-column">
+      <?php
+
+      echo "<h5> Navigate </h5>";
+      wp_nav_menu(array(
+        'theme_location' => 'custom-footer-links',
+        'container'      => 'nav', // Optional: wrap the menu in a <nav> tag
+        'menu_class'     => 'footer-menu-items', // Optional: add a custom CSS class to the <ul>
+        'echo'           => true,
+        'container_class' => 'custom-footer-links',
+      ));
+      ?>
+
+    </div>
+  </div>
+
+  <div class="footer-info">
+    <p>
+      &copy; <span id="displayYear"></span> All Rights Reserved By
+      <a href="https://html.design/">Kush Mistry</a><br><br>
+      &copy; <span id="displayYear"></span> Distributed By
+      <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+    </p>
+  </div>
+</footer>
+
 
 <?php wp_footer(); ?>
 </body>
+
 </html>
