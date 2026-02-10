@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "color": {
+      "palette": [
+        { "slug": "brand-primary", "color": "#007cba", "name": "Brand Primary" }
+      ]
+    },
+    "layout": {
+      "contentSize": "800px"
+    }
+  },
+  "styles": {
+    "color": {
+      "text": "var(--wp--preset--color--brand-primary)"
+    }
+  }
+}

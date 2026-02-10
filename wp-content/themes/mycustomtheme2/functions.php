@@ -94,3 +94,42 @@ function custom_theme_footer_widgets_init() {
 add_action( 'widgets_init', 'custom_theme_footer_widgets_init' );
 
 
+
+// 1. Display the field
+add_action( 'woocommerce_after_checkout_billing_form', 'render_permanent_address_field' );
+function render_permanent_address_field( $checkout ) {
+    woocommerce_form_field( 'my_custom_address_id', array(
+        'type'          => 'text',
+        'label'         => __('Permanent Address'),
+        'placeholder'   => __('Enter address here...'),
+        'required'      => true,
+    ), $checkout->get_value( 'my_custom_address_id' ));
+}
+
+// 2. The "Guaranteed" Save (Works for both   )
+add_action( 'woocommerce_checkout_create_order', 'force_save_custom_field', 10, 2 );
+function force_save_custom_field( $order, $data ) {
+    if ( isset( $_POST['my_custom_address_id'] ) ) {
+
+        $order->update_meta_data( '_permanent_address', sanitize_text_field( $_POST['my_custom_address_id'] ) );
+    }
+}
+
+
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'display_custom_field_in_admin', 10, 1 );
+
+function display_custom_field_in_admin($order){
+    $address = $order->get_meta( '_permanent_address' );
+    if ( $address ) {
+        echo '<p><strong>'.__('Permanent Address').'</strong>: ' . $address . '</p>';
+    }
+}
+
+
+function my_custom_banner_shortcode() {
+    return '<div class="custom-banner">Check out our new custom theme features!</div>';
+}
+
+add_shortcode('my_banner', 'my_custom_banner_shortcode');
+
+
