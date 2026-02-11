@@ -186,11 +186,8 @@
               <div class="movie-card">
 
                 <div class="movie-img">
-                  <?php
-                  $img = get_first_image_from_content();
-                  if ($img) : ?>
-                    <img src="<?php echo esc_url($img); ?>" alt="Image not found">
-                  <?php endif; ?>
+                  <?php the_post_thumbnail(); ?>
+
                 </div>
 
 
@@ -236,7 +233,7 @@
     <div class="row">
       <div class="col-md-6 ">
         <div class="img-box">
-            <img src="<?php echo esc_url(get_field('image_about')); ?>" alt="">
+          <img src="<?php echo esc_url(get_field('image_about')); ?>" alt="">
         </div>
       </div>
       <div class="col-md-6">
@@ -249,9 +246,23 @@
           <p>
             <?php echo get_field('long_text_about') ?>
           </p>
-          <a href="<?php echo esc_url(get_field('button_about')); ?>">
-            Read More
-          </a>
+          <?php
+          $link = get_field('button_about');
+          if ($link):
+            // Extract the individual components of the link array.
+            $link_url = $link['url'];
+            $link_title = $link['title'];
+            // Set target to _self by default if no custom target is specified.
+            $link_target = $link['target'] ? $link['target'] : '_self';
+          ?>
+
+            <!-- Output the link with proper escaping for security -->
+            <a class="your-custom-class" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>">
+              <?php echo esc_html($link_title); ?>
+            </a>
+
+          <?php endif; ?>
+          
         </div>
       </div>
     </div>
