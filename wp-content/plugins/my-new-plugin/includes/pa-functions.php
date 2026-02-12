@@ -37,12 +37,13 @@ function mfp_filter_empty_rows($input) {
     $cleaned_input = array_filter($input, function($row) {
         // Return TRUE only if text is not empty OR number is not empty
         // If both are empty, this row returns FALSE and is deleted from the array
-        return (!empty($row['text']) || !empty($row['number']));
+        return (!empty($row['product_title']) || !empty($row['product_price']));
     });
 
     // Reset the keys to 0, 1, 2... so there are no gaps
     return array_values($cleaned_input);
 }
+
 
 function product_repeater_page_html() {
     include( plugin_dir_path( __FILE__ ) . 'pa-first-acp-page.php' );
@@ -58,7 +59,7 @@ function pa_display_repeater_shortcode() {
 
     $output = '<ul>';
     foreach ($data as $row) {
-        $output .= '<li>' . esc_html($row['text']) . ': ' . esc_html($row['number']) . '</li>';
+        $output .= '<li>' . esc_html($row['product_title']) . ': ' . esc_html($row['product_price']) . '</li>';
     } 
     $output .= '</ul>';
     

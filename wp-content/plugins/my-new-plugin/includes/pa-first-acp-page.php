@@ -13,16 +13,16 @@
         <div id="mfp-repeater-container">
             <?php
             // If no data exists, we create a dummy array with one empty row so the loop runs once
-            $display_data = (!empty($data) && is_array($data)) ? $data : [['text' => '', 'number' => '']];
+            $display_data = (!empty($data) && is_array($data)) ? $data : [['product_title' => '', 'product_price' => '']];
 
             foreach ($display_data as $index => $row) :
             ?>
                 <div class="repeater-row" style="margin-bottom: 10px;">
-                    <input type="text" name="pa_repeater_data[<?php echo $index; ?>][text]"
-                        value="<?php echo esc_attr($row['text'] ?? ''); ?>" placeholder="Enter Text" />
+                    <input type="text" name="pa_repeater_data[<?php echo $index; ?>][product_title]"
+                        value="<?php echo esc_attr($row['product_title'] ?? ''); ?>" placeholder="Enter " />
 
-                    <input type="number" name="pa_repeater_data[<?php echo $index; ?>][number]"
-                        value="<?php echo esc_attr($row['number'] ?? ''); ?>" placeholder="0" />
+                    <input type="number" name="pa_repeater_data[<?php echo $index; ?>][product_price]"
+                        value="<?php echo esc_attr($row['product_price'] ?? ''); ?>" placeholder="0" />
 
                     <?php
                     // This makes the first field permanent
@@ -51,8 +51,8 @@
             newRow.className = 'repeater-row';
             newRow.style.marginBottom = '10px';
             newRow.innerHTML = `
-            <input type="text" name="pa_repeater_data[${rowCount}][text]" placeholder="Enter Text" />
-            <input type="number" name="pa_repeater_data[${rowCount}][number]" placeholder="0" />
+            <input type="text" name="pa_repeater_data[${rowCount}][product_title]" placeholder="Enter " />
+            <input type="number" name="pa_repeater_data[${rowCount}][product_price]" placeholder="0" />
             <button type="button" class="remove-row">Remove</button>
         `;
             container.appendChild(newRow);
