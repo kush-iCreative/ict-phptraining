@@ -1,6 +1,4 @@
 <?php get_header(); 
-
-echo do_shortcode('[my_banner]'); 
 ?>
 
 <div id="content" style="margin-top: 50px;">

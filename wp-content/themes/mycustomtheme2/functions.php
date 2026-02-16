@@ -18,7 +18,7 @@ function custom_footer_menu_register()
 {
   register_nav_menu('custom-footer-links', __('Custom Footer Links Menu Location'));
 }
-add_action('init', 'custom_footer_menu_register');
+add_action('after_setup_theme', 'custom_footer_menu_register');
 
 /*import css and js */
 function feane_assets()
@@ -89,7 +89,7 @@ add_action('widgets_init', 'custom_theme_footer_widgets_init');
 
 
 
- // woocommerce add checkout custom field
+// woocommerce add checkout custom field
 // 1. Display the field
 add_action('woocommerce_after_checkout_billing_form', 'render_permanent_address_field');
 function render_permanent_address_field($checkout)
@@ -115,6 +115,7 @@ function force_save_custom_field($order)
 
 add_action('woocommerce_admin_order_data_after_billing_address', 'display_custom_field_in_admin', 10, 1);
 
+
 function display_custom_field_in_admin($order)
 {
   $address = $order->get_meta('_permanent_address');
@@ -124,155 +125,216 @@ function display_custom_field_in_admin($order)
 }
 
 
-/* custom message with shortcode
-function my_custom_banner_shortcode()
-{
-  return '<div class="custom-banner">Check out our new custom theme features!</div>';
-}
+// end woocommerce task 
 
-add_shortcode('my_banner', 'my_custom_banner_shortcode');
-*/
 /**create shortcode and show posttype */
-function custom_post_type_shortcode_listing( $atts ) {
-    ob_start();
-    
-    $atts = shortcode_atts( array(
-        'type'           => 'movies', 
-        'posts_per_page' => 3,
-        'order'          => 'DESC',
-    ), $atts, 'custom_post_list' );
+function custom_post_type_shortcode_listing($atts)
+{
+  ob_start();
 
-    $args = array(
-        'post_type'      => $atts['type'],
-        'posts_per_page' => $atts['posts_per_page'],
-        'order'          => $atts['order'],
-        'orderby'        => $atts['orderby'],
-        'post_status'    => 'publish',
-    );
+  $atts = shortcode_atts(array(
+    'type'           => 'movies',
+    'posts_per_page' => 3,
+    'order'          => 'DESC',
+  ), $atts, 'custom_post_list');
 
-    $query = new WP_Query( $args );
+  $args = array(
+    'post_type'      => $atts['type'],
+    'posts_per_page' => $atts['posts_per_page'],
+    'order'          => $atts['order'],
+    'orderby'        => $atts['orderby'],
+    'post_status'    => 'publish',
+  );
 
-    if ( $query->have_posts() ) {
-        echo '<div class="movie-container">';
-        while ( $query->have_posts() ) : $query->the_post();
-            echo '<div class="movie-item" style="margin-bottom: 20px; display:inline-block ;padding:10px;"> ';
+  $query = new WP_Query($args);
 
-            echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . get_the_title() . '</a></h3>';
+  if ($query->have_posts()) {
+    echo '<div class="movie-container">';
+    while ($query->have_posts()) : $query->the_post();
+      echo '<div class="movie-item" style="margin-bottom: 20px; display:inline-block ;padding:10px;"> ';
 
-             // Fetch and display the featured image if it exists
-            if ( has_post_thumbnail() ) {
-                echo '<div class="movie-thumbnail">';
-                echo '<a href="' . esc_url( get_permalink() ) . '">' . get_the_post_thumbnail( get_the_ID(), 'medium' ) . '</a>';
-                echo '</div>';
-            }
+      echo '<h3><a href="' . esc_url(get_permalink()) . '">' . get_the_title() . '</a></h3>';
 
-            
-            echo '</div>';
-        endwhile;
+      // Fetch and display the featured image if it exists
+      if (has_post_thumbnail()) {
+        echo '<div class="movie-thumbnail">';
+        echo '<a href="' . esc_url(get_permalink()) . '">' . get_the_post_thumbnail(get_the_ID(), 'medium') . '</a>';
         echo '</div>';
-        wp_reset_postdata();
-    } else {
-        echo 'Sorry, no posts were found for this post type.';
-    }
+      }
 
-    return ob_get_clean();
+
+      echo '</div>';
+    endwhile;
+    echo '</div>';
+    wp_reset_postdata();
+  } else {
+    echo 'Sorry, no posts were found for this post type.';
+  }
+
+  return ob_get_clean();
 }
-add_shortcode( 'custom_post_list', 'custom_post_type_shortcode_listing' );
+add_shortcode('custom_post_list', 'custom_post_type_shortcode_listing');
 
 
 
-// add custom menu option 
+/* add custom menu option  theme option without any plugin */
 
 
 /*Add option into apperance */
-function mytheme_options_page() {
-    add_theme_page(
-        'My Theme Options',          // Page title
-        'Theme Options',             // Menu title
-        'manage_options',            // Capability required
-        'mytheme-options',           // Menu slug
-        'mytheme_options_page_html'  // Callback function
-    );
+function mytheme_options_page()
+{
+  add_theme_page(
+    'My Theme Options',          // Page title
+    'Theme Options here',             // Menu title
+    'manage_options',            // Capability required
+    'mytheme-options',           // Menu slug
+    'mytheme_options_page_html'  // Callback function
+  );
 }
-add_action( 'admin_menu', 'mytheme_options_page' ,10);
+add_action('admin_menu', 'mytheme_options_page', 10);
 
 
 /*Ui part */
-function mytheme_options_page_html() {
-    // Check user capabilities
-    if ( ! current_user_can( 'manage_options' ) ) {
-        return;
+function mytheme_options_page_html()
+{
+  // Check user capabilities
+  if (! current_user_can('manage_options')) {
+    return;
+  }
+  // show error/success messages
+  settings_errors('mytheme_options_group');
+?>
+  <div class="wrap">
+    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+    <form action="options.php" method="post">
+      <?php
+      settings_fields('mytheme_options_group'); //generate hidden security tokes so wordpress knows the request is legitimate
+      // Automatically loops through every section and field you register
+      do_settings_sections('mytheme-options');
+      // output save settings button
+      submit_button('Save Settings');
+      ?>
+    </form>
+  </div>
+<?php
+}
+
+function mytheme_register_settings()
+{
+  register_setting('mytheme_options_group', 'mytheme_footer_text', 'sanitize_text_field');
+
+  register_setting('mytheme_options_group', 'mytheme_social_link', 'esc_url_raw'); // Use esc_url_raw for links
+
+  add_settings_section(
+    'mytheme_section_general', // Section ID
+    'General Settings',        // Section title
+    'mytheme_section_general_callback', // Section callback
+    'mytheme-options'          // Page slug
+  );
+
+  add_settings_field(
+    'mytheme_footer_text_field', // Field ID
+    'Footer Text',               // Field title
+    'mytheme_footer_text_field_callback',
+    'mytheme-options',           // Page slug
+    'mytheme_section_general'    // Section ID
+  );
+
+  // NEW: Add the second field to the same section
+  add_settings_field(
+    'mytheme_social_link_field',   // Unique ID
+    'Social Media Link',           // Label
+    'mytheme_social_link_callback', // Callback function below
+    'mytheme-options',             // Page slug
+    'mytheme_section_general'      // Section ID
+  );
+}
+add_action('admin_init', 'mytheme_register_settings', 20);
+
+
+function mytheme_social_link_callback()
+{
+  // Get the value of the new setting
+  $link = get_option('mytheme_social_link');
+?>
+  <input type="url" name="mytheme_social_link" value="<?php echo esc_url($link); ?>" class="regular-text">
+  <p class="description">Enter your full Twitter or Facebook URL.</p>
+<?php
+}
+
+
+function mytheme_section_general_callback()
+{
+  echo '<p>Enter general theme settings below.</p>';
+}
+
+function mytheme_footer_text_field_callback()
+{
+  $setting = get_option('mytheme_footer_text'); //get value from db
+?>
+  <input type="text" name="mytheme_footer_text" value="<?php echo esc_attr($setting); ?>">
+
+<?php
+}
+
+
+/* custom meta field */
+
+add_action('add_meta_boxes', 'movie_register_repeater_metabox');
+function movie_register_repeater_metabox()
+{
+  add_meta_box('pa_repeater_box', 'Movie Repeater', 'movie_display_repeater_box', 'movies', 'normal');
+}
+add_action('admin_enqueue_scripts', function ($hook) {
+  if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
+  wp_enqueue_script('my-repeater-js', get_template_directory_uri() . '/js/custom.js');
+});
+
+function movie_display_repeater_box($post)
+{
+  $data = get_post_meta($post->ID, 'movie_repeater_data', true);
+  // Ensure at least one row exists
+  $display_data = (!empty($data) && is_array($data)) ? $data : [['movie_date' => '', 'movie_price' => '']];
+?>
+  <div id="mfp-repeater-container">
+    <?php foreach ($display_data as $index => $row) : ?>
+      <div class="repeater-row" style="margin-bottom: 10px; display: flex; gap: 10px;">
+        <input type="date" name="movie_repeater_data[<?php echo $index; ?>][movie_date]"
+          value="<?php echo esc_attr($row['movie_date'] ?? ''); ?>" placeholder="Enter date" />
+        <input type="number" name="movie_repeater_data[<?php echo $index; ?>][movie_price]"
+          value="<?php echo esc_attr($row['movie_price'] ?? ''); ?>" placeholder="Enter Movie price" />
+        <?php if ($index > 0) : ?>
+          <button type="button" class="remove-row button-link-delete">Remove</button>
+        <?php endif; ?>
+      </div>
+    <?php endforeach; ?>
+  </div>
+  <button type="button" id="add-row" class="button" style="margin-top: 10px;">Add More Field</button>
+
+<?php
+}
+
+// 3. Save the Data
+add_action('save_post', 'movie_save_repeater_data');
+function movie_save_repeater_data($post_id)
+{
+  if (isset($_POST['movie_repeater_data']) && is_array($_POST['movie_repeater_data'])) {
+    $sanitized_data = [];
+
+    foreach ($_POST['movie_repeater_data'] as $data) {
+      // Check if BOTH fields are NOT empty
+      if (!empty($data['movie_date']) && !empty($data['movie_price'])) {
+        $sanitized_data[] = [
+          'movie_date'  => sanitize_text_field($data['movie_date']),
+          'movie_price' => sanitize_text_field($data['movie_price']),
+        ];
+      }
     }
-    // show error/success messages
-    settings_errors( 'mytheme_options_group' );
-    ?>
-    <div class="wrap">
-        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-        <form action="options.php" method="post">
-            <?php
-            settings_fields( 'mytheme_options_group' );//generate hidden security tokes so wordpress knows the request is legitimate
-            // Automatically loops through every section and field you register
-            do_settings_sections( 'mytheme-options' );
-            // output save settings button
-            submit_button( 'Save Settings' );
-            ?>
-        </form>
-    </div>
-    <?php
+
+    if (!empty($sanitized_data)) {
+      update_post_meta($post_id, 'movie_repeater_data', $sanitized_data); //key,meta key and value
+    } else {
+      delete_post_meta($post_id, 'movie_repeater_data');
+    }
+  }
 }
-
-function mytheme_register_settings() {
-    register_setting( 'mytheme_options_group', 'mytheme_footer_text', 'sanitize_text_field' );
-      
-     register_setting( 'mytheme_options_group', 'mytheme_social_link', 'esc_url_raw' ); // Use esc_url_raw for links
-
-    add_settings_section(
-        'mytheme_section_general', // Section ID
-        'General Settings',        // Section title
-        'mytheme_section_general_callback', // Section callback
-        'mytheme-options'          // Page slug
-    );
-
-   add_settings_field(
-        'mytheme_footer_text_field', // Field ID
-        'Footer Text',               // Field title
-        'mytheme_footer_text_field_callback', 
-        'mytheme-options',           // Page slug
-        'mytheme_section_general'    // Section ID
-    );
-
-        // NEW: Add the second field to the same section
-    add_settings_field(
-        'mytheme_social_link_field',   // Unique ID
-        'Social Media Link',           // Label
-        'mytheme_social_link_callback', // Callback function below
-        'mytheme-options',             // Page slug
-        'mytheme_section_general'      // Section ID
-    );
-}
-add_action( 'admin_init', 'mytheme_register_settings',20 );
-
-
-function mytheme_social_link_callback() {
-    // Get the value of the new setting
-    $link = get_option( 'mytheme_social_link' );
-    ?>
-    <input type="url" name="mytheme_social_link" value="<?php echo esc_url( $link ); ?>" class="regular-text">
-    <p class="description">Enter your full Twitter or Facebook URL.</p>
-    <?php
-}
-
-
-function mytheme_section_general_callback() {
-    echo '<p>Enter general theme settings below.</p>';
-}
-
-function mytheme_footer_text_field_callback() {
-    $setting = get_option( 'mytheme_footer_text' ); //get value from db
-    ?>
-    <input type="text" name="mytheme_footer_text" value="<?php echo esc_attr( $setting ); ?>">
-    
-    <?php
-}
-
-
