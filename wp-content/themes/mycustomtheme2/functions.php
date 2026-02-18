@@ -123,9 +123,9 @@ function display_custom_field_in_admin($order)
     echo '<p><strong>' . __('Permanent Address') . '</strong>: ' . $address . '</p>';
   }
 }
-
-
 // end woocommerce task 
+
+
 
 /**create shortcode and show posttype */
 function custom_post_type_shortcode_listing($atts)
@@ -161,7 +161,6 @@ function custom_post_type_shortcode_listing($atts)
         echo '<a href="' . esc_url(get_permalink()) . '">' . get_the_post_thumbnail(get_the_ID(), 'medium') . '</a>';
         echo '</div>';
       }
-
 
       echo '</div>';
     endwhile;
@@ -286,53 +285,59 @@ function movie_register_repeater_metabox()
   add_meta_box('pa_repeater_box', 'Movie Repeater', 'movie_display_repeater_box', 'movies', 'normal');
 }
 add_action('admin_enqueue_scripts', function ($hook) {
-  if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
+  if ($hook !== 'post.php' && $hook !== 'post-new.php') {
+    return;
+  }
   wp_enqueue_script('my-repeater-js', get_template_directory_uri() . '/js/custom.js');
 });
 
 function movie_display_repeater_box($post)
 {
   $data = get_post_meta($post->ID, 'movie_repeater_data', true);
-  // Ensure at least one row exists
+  // Ensure at least one row exists for the initial view
   $display_data = (!empty($data) && is_array($data)) ? $data : [['movie_date' => '', 'movie_price' => '']];
 ?>
+  <p id="error-message" style="color: red;"></p>
   <div id="mfp-repeater-container">
     <?php foreach ($display_data as $index => $row) : ?>
       <div class="repeater-row" style="margin-bottom: 10px; display: flex; gap: 10px;">
-        <input type="date" name="movie_repeater_data[<?php echo $index; ?>][movie_date]"
-          value="<?php echo esc_attr($row['movie_date'] ?? ''); ?>" placeholder="Enter date" />
-        <input type="number" name="movie_repeater_data[<?php echo $index; ?>][movie_price]"
-          value="<?php echo esc_attr($row['movie_price'] ?? ''); ?>" placeholder="Enter Movie price" />
+
+        <input type="date"
+          name="movie_repeater_data[<?php echo $index; ?>][movie_date]"
+          value="<?php echo esc_attr($row['movie_date'] ?? ''); ?>" />
+
+        <input type="number"
+          name="movie_repeater_data[<?php echo $index; ?>][movie_price]"
+          value="<?php echo esc_attr($row['movie_price'] ?? ''); ?>" />
+
         <?php if ($index > 0) : ?>
-          <button type="button" class="remove-row button-link-delete">Remove</button>
+          <button type="button" class="remove-row">Remove</button>
         <?php endif; ?>
       </div>
     <?php endforeach; ?>
   </div>
   <button type="button" id="add-row" class="button" style="margin-top: 10px;">Add More Field</button>
-
 <?php
 }
 
+
 // 3. Save the Data
-add_action('save_post', 'movie_save_repeater_data');
+add_action('save_post', 'movie_save_repeater_data', 10, 3);
 function movie_save_repeater_data($post_id)
 {
   if (isset($_POST['movie_repeater_data']) && is_array($_POST['movie_repeater_data'])) {
-    $sanitized_data = [];
-
-    foreach ($_POST['movie_repeater_data'] as $data) {
-      // Check if BOTH fields are NOT empty
-      if (!empty($data['movie_date']) && !empty($data['movie_price'])) {
-        $sanitized_data[] = [
-          'movie_date'  => sanitize_text_field($data['movie_date']),
-          'movie_price' => sanitize_text_field($data['movie_price']),
-        ];
+    $sanitized_data = array();
+    foreach ($_POST['movie_repeater_data'] as $row) {
+      if (!empty($row['movie_date']) && !empty($row['movie_price'])) {
+        $sanitized_data[] = array(
+          'movie_date' => sanitize_text_field($row['movie_date']),
+          'movie_price' => sanitize_text_field($row['movie_price']),
+        );
       }
     }
 
     if (!empty($sanitized_data)) {
-      update_post_meta($post_id, 'movie_repeater_data', $sanitized_data); //key,meta key and value
+      update_post_meta($post_id, 'movie_repeater_data', $sanitized_data);
     } else {
       delete_post_meta($post_id, 'movie_repeater_data');
     }

@@ -8,13 +8,7 @@ echo "custom template";
 get_header();
 
 // 1. Get the current page number
-if ( get_query_var( 'paged' ) ) {
-    $paged = get_query_var( 'paged' );
-} elseif ( get_query_var( 'page' ) ) {
-    $paged = get_query_var( 'page' );
-} else {
-    $paged = 1;
-}
+$paged = get_query_var('paged') ? get_query_var('paged'): 1;
 
 // 2. Define the arguments for the custom query
 $args = array(

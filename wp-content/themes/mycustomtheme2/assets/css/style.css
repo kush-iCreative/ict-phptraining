@@ -1183,3 +1183,21 @@ a:focus {
         gap: 15px;
     }
 }
+
+
+/* custom error show  */
+.error-message {
+    color: red !important; 
+    font-size: 12px;
+    display: none; /* Hidden by default */
+    margin-top: 5px;
+}
+
+/* Optional: Highlight the input box when invalid */
+.invalid input {
+    border: 1px solid red;
+}
+
+.invalid .error-msg {
+    display: block; /* Show message when parent has "invalid" class */
+}
